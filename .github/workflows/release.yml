@@ -1,6 +1,7 @@
 name: Create Draft
 
 on:
+  workflow_dispatch:
   push:
     tags:
       - 'v*.*.*'  # タグがプッシュされたときにトリガー
