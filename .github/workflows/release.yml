@@ -1,0 +1,61 @@
+name: Create Draft
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'  # タグがプッシュされたときにトリガー
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout the repository
+        uses: actions/checkout@v3
+
+      - name: Set version variable from tag
+        id: vars
+        run: |
+          VERSION=${{ github.ref_name }}
+          VERSION=${VERSION#v}
+          VERSION=${VERSION%.*}
+          echo "VERSION=${VERSION}" >> $GITHUB_ENV
+
+      - name: Generate release notes
+        id: release_notes
+        run: |
+          echo "Release notes for ${{ github.ref_name }}" > release_notes.txt
+
+      - name: Create GitHub Release (Draft)
+        id: create_release
+        uses: actions/create-release@v1
+        with:
+          tag_name: ${{ github.ref_name }}
+          release_name: ${{ github.ref_name }}
+          body_path: ./release_notes.txt
+          draft: true
+          prerelease: false
+
+      - name: Upload TONSignAsset.unitypackage
+        uses: actions/upload-release-asset@v1
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./path/to/TONSignAsset.unitypackage
+          asset_name: TONSignAsset.unitypackage
+          asset_content_type: application/octet-stream
+
+      - name: Upload TONSign_Classic_or_Special.exe
+        uses: actions/upload-release-asset@v1
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./path/to/TONSign_Classic_or_Special_${{ env.VERSION }}.exe
+          asset_name: TONSign_Classic_or_Special_${{ env.VERSION }}.exe
+          asset_content_type: application/octet-stream
+
+      - name: Upload TONSign_JP.exe
+        uses: actions/upload-release-asset@v1
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./Assets/TONSign_JP_${{ env.VERSION }}.exe
+          asset_name: TONSign_JP_${{ env.VERSION }}.exe
+          asset_content_type: application/octet-stream
