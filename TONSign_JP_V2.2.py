@@ -64,7 +64,7 @@ def predict_next_round(round_log, bonus_flag):
 def get_recent_rounds_log(round_log):
     return ', '.join(['X' if round_type == "クラシック" else 'O' for round_type in round_log])
 
-def monitor_round_types(log_file, known_round_types, osc_client):
+def monitor_round_types(log_file, en_known_round_types, known_round_types, osc_client):
     round_log = []
     last_position = 0
     bonus_flag = False
@@ -89,6 +89,9 @@ def monitor_round_types(log_file, known_round_types, osc_client):
                     if len(parts) > 1:
                         possible_round_type = parts[1].strip().split()[0:2]
                         possible_round_type = " ".join(possible_round_type)
+
+                        if possible_round_type in en_known_round_types:
+                            possible_round_type = known_round_types[en_known_round_types.index(possible_round_type)]
 
                         if possible_round_type in known_round_types:
                             update_round_log(round_log, possible_round_type)
@@ -120,6 +123,12 @@ port = 9000
 osc_client = SimpleUDPClient(ip, port)
 
 # Current round types in game
+en_round_types = [
+    'Classic', 'Fog', 'Punished', 'Sabotage', 'Cracked', 'Alternate',
+    'Bloodbath', 'Midnight', 'Mystic Moon', 'Twilight', 'Solstice', 
+    '8 Pages', 'Blood Moon'
+]
+
 round_types = [
     'クラシック', '霧', 'パニッシュ', 'サボタージュ', '狂気', 'オルタネイト',
     'ブラッドバス', 'ミッドナイト', 'ミスティックムーン', 'トワイライト', 'ソルスティス', 
@@ -131,6 +140,6 @@ log_directory = os.path.join(os.path.expanduser("~"), "AppData", "LocalLow", "VR
 latest_log_file = find_latest_log(log_directory)
 
 if latest_log_file:
-    monitor_round_types(latest_log_file, round_types, osc_client)
+    monitor_round_types(latest_log_file, en_round_types, round_types, osc_client)
     
 #こんにちは、コーダー仲間！ <3 :3/
