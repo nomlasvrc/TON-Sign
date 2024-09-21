@@ -43,7 +43,7 @@ jobs:
         uses: actions/upload-release-asset@v1
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./path/to/TONSignAsset.unitypackage
+          asset_path: ./Assets/TONSignAsset.unitypackage
           asset_name: TONSignAsset.unitypackage
           asset_content_type: application/octet-stream
 
@@ -51,7 +51,7 @@ jobs:
         uses: actions/upload-release-asset@v1
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./path/to/TONSign_Classic_or_Special_${{ env.VERSION }}.exe
+          asset_path: ./Assets/TONSign_Classic_or_Special_${{ env.VERSION }}.exe
           asset_name: TONSign_Classic_or_Special_${{ env.VERSION }}.exe
           asset_content_type: application/octet-stream
 
