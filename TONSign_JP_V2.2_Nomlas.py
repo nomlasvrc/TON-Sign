@@ -70,7 +70,8 @@ def monitor_round_types(log_file, known_round_types, osc_client):
             for line in lines:
                 if "OnMasterClientSwitched" in line:
                     print("***\n*** ホストが去った、次回は特殊ラウンドとなる。\n***")
-                    osc_client.send_message("/avatar/parameters/TON_Sign", True)
+                    osc_client.send_message("/avatar/parameters/TON_Sign_Sp", True)
+                    osc_client.send_message("/avatar/parameters/TON_Sign_Cl", False)
 
                 if "the round type is" in line:
                     parts = line.split("the round type is")
