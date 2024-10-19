@@ -72,8 +72,8 @@ def monitor_round_types(log_file, known_round_types, osc_client):
                     print("***\n*** ホストが去った、次回は特殊ラウンドとなる。\n***")
                     osc_client.send_message("/avatar/parameters/TON_Sign", True)
 
-                if "Round type is" in line:
-                    parts = line.split("Round type is")
+                if "the round type is" in line:
+                    parts = line.split("the round type is")
                     if len(parts) > 1:
                         possible_round_type = parts[1].strip().split()[0:2]
                         possible_round_type = " ".join(possible_round_type)
