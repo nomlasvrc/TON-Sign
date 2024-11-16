@@ -1,3 +1,5 @@
+V3.0は[ToNSaveManager](https://github.com/ChrisFeline/ToNSaveManager)のWebSocket API サーバーを有効化する必要があります。
+
 # TON-Sign
 # (CURRENTLY NOT WORKING DUE TO TERROR NIGHTS REMOVAL. FIXING SOON)
 ## By \~Emerald~
