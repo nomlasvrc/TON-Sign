@@ -99,9 +99,15 @@ def get_recent_rounds_log(round_log):
 # ---
 
 def show_message(message, round_log, osc_client):
+    global current_round_number
+
+    special_rounds = {2, 6, 7, 8, 10, 50, 52}
+
     colorful = True
     xsoverlay = False
+    only_special = False
     show_player_notification = True
+    terror = True
 
     RESET = '\033[0m'
     try:
@@ -133,9 +139,11 @@ def show_message(message, round_log, osc_client):
                         else:
                             m += f", {names[i]}"
                             n += f", {names[i]}"
-                    print(m)
-                    if xsoverlay:
-                        XSOverlayNotification(n)
+                    if terror:
+                        if (only_special == False) or (only_special and (current_round_number in special_rounds)):
+                            print(m)
+                            if xsoverlay:
+                                XSOverlayNotification(n)
 
             case "ROUND_TYPE":
                 command = data.get("Command")
@@ -144,13 +152,12 @@ def show_message(message, round_log, osc_client):
                 display_name = data.get("DisplayName")
                 display_color = data.get("DisplayColor")
 
-                possible_round_type_number = value
+                round_type_number = value
                 round_type = display_name
-                if command == 0:
-                    print(f"ラウンド終了")
-                elif command == 1:
+                if command == 1:
                     # ラウンド開始
-                    update_round_log(round_log, possible_round_type_number)
+                    current_round_number = round_type_number
+                    update_round_log(round_log, round_type_number)
                     if colorful:
                         print(f"~ 新しいラウンドが始まった！ ~\n~ ラウンドの種類は: {color(display_color, False)}{round_type}{RESET} ~\n")
                     else:
@@ -170,8 +177,6 @@ def show_message(message, round_log, osc_client):
                     else:
                         osc_client.send_message("/avatar/parameters/TON_Sign_Sp", False)
                         osc_client.send_message("/avatar/parameters/TON_Sign_Cl", True)
-                else:
-                    print(f"(未定義エラー)ラウンドコマンド: {command}")
 
             case "PLAYER_JOIN":
                 player_name = data.get("Value")
@@ -195,6 +200,7 @@ def show_message(message, round_log, osc_client):
         return []
 
 async def main():
+    global current_round_number
 
     # OSC setup
     ip = "127.0.0.1"
@@ -206,6 +212,8 @@ async def main():
         round_log = []
         while True:
             round_log = show_message(await websocket.recv(), round_log, osc_client)
+
+current_round_number = 0
 
 try:
     print("ToNSaveManagerに接続中...")
