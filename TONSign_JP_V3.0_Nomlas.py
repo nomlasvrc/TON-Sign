@@ -53,9 +53,9 @@ def XSOverlayNotification(NotificationMessage):
 # ---ToNSign用関数
 
 def classify_round(round_type_number):
-    exempt_rounds = {100, 102, 103}
+    exempt_rounds = {100, 101, 102, 103}
     special_rounds = {2, 3, 4, 5, 6, 7, 8, 9, 10, 50, 51, 52, 53, 105, 107}
-    classic_rounds = {1, 101, 104}
+    classic_rounds = {1, 104}
     
     if round_type_number in exempt_rounds:
         return "Exempt"
