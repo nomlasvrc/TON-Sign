@@ -73,6 +73,12 @@ def monitor_round_types(log_file, known_round_types, osc_client):
                     osc_client.send_message("/avatar/parameters/TON_Sign_Sp", True)
                     osc_client.send_message("/avatar/parameters/TON_Sign_Cl", False)
 
+                if "Respawned? Coward." in line:
+                    print("リスポーンしたのか？臆病者だな。\n")
+
+                if "This round is taking place at Dring King's Citadel (1) and the round type is Run" in line:
+                    print("走れ！")
+
                 if "the round type is" in line:
                     parts = line.split("the round type is")
                     if len(parts) > 1:
